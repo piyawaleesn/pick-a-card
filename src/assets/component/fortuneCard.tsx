@@ -11,32 +11,90 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  useTheme,
 } from "@mui/material";
+import { FaMoon, FaStar, FaSun } from "react-icons/fa";
+import {
+  BsSuitHeartFill,
+  BsSuitDiamondFill,
+  BsSuitClubFill,
+  BsSuitSpadeFill,
+} from "react-icons/bs";
 
 function FortuneCard() {
-  const [selectedCard, setSelectedCard] = useState<string | null>(null);
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
+  const iconColor = isDark ? "#fff" : "#000";
+
+  const [selectedCardKey, setSelectedCardKey] = useState<string | null>(null);
   const [shuffledCards, setShuffledCards] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
   const [fortune, setFortune] = useState<string>("");
 
-  const cards = ["❤️", "♠️", "♦️", "♣️", "🃏", "🎴"];
+  const cardKeys = ["heart", "spade", "diamond", "club", "moon", "star", "sun"];
+
   const fortunes = [
-    "คุณจะโชคดีในเร็วๆ นี้ 🎉",
-    "ระวังเรื่องการเงิน 💸",
+    "โชคดีใกล้เข้ามาแล้ว... แต่ดูเหมือนมันกำลังติดรถเมล์อยู่ 🚌🎉",
+    "คนที่แอบชอบคุณ... ยังไม่กล้าทักมาเหมือนเดิม 😂",
+    "เงินจะมาหาคุณ... ถ้าคุณหยุดช้อปออนไลน์สักวันนึง 💸🛒",
+    "วันนี้คุณจะเจอความรัก... ในรูปแบบของหมูกระทะ 🐷🔥",
+    "คุณจะได้พบกับความสุขง่ายๆ... อย่างการนอนต่ออีก 5 นาทีหลังตื่นนอน 😴🛏️",
+    "คุณมีเสน่ห์... กับแมวข้างบ้านที่มานอนหน้าประตู 🐱❤️",
     "จะมีคนคิดถึงคุณ 🥰",
-    "โอกาสดีจะเข้ามา ✨",
-    "อย่าเพิ่งตัดสินใจเร็วเกินไป 🤔",
-    "วันนี้คุณคือผู้ชนะ! 🏆",
   ];
 
-  const shuffleCards = () => {
-    const shuffled = [...cards].sort(() => Math.random() - 0.5);
-    setShuffledCards(shuffled);
-    setSelectedCard(null);
+  const renderIconByKey = (key: string) => {
+    const size = 48;
+    switch (key) {
+      case "heart":
+        return <BsSuitHeartFill color={iconColor} size={size} />;
+      case "spade":
+        return <BsSuitSpadeFill color={iconColor} size={size} />;
+      case "diamond":
+        return <BsSuitDiamondFill color={iconColor} size={size} />;
+      case "club":
+        return <BsSuitClubFill color={iconColor} size={size} />;
+      case "moon":
+        return <FaMoon color={iconColor} size={size} />;
+      case "star":
+        return <FaStar color={iconColor} size={size} />;
+      case "sun":
+        return <FaSun color={iconColor} size={size} />;
+      default:
+        return null;
+    }
   };
 
-  const handleCardClick = (card: string) => {
-    setSelectedCard(card);
+  const renderBigIconByKey = (key: string) => {
+    const size = 96;
+    switch (key) {
+      case "heart":
+        return <BsSuitHeartFill color={iconColor} size={size} />;
+      case "spade":
+        return <BsSuitSpadeFill color={iconColor} size={size} />;
+      case "diamond":
+        return <BsSuitDiamondFill color={iconColor} size={size} />;
+      case "club":
+        return <BsSuitClubFill color={iconColor} size={size} />;
+      case "moon":
+        return <FaMoon color={iconColor} size={size} />;
+      case "star":
+        return <FaStar color={iconColor} size={size} />;
+      case "sun":
+        return <FaSun color={iconColor} size={size} />;
+      default:
+        return null;
+    }
+  };
+
+  const shuffleCards = () => {
+    const shuffled = [...cardKeys].sort(() => Math.random() - 0.5);
+    setShuffledCards(shuffled);
+    setSelectedCardKey(null);
+  };
+
+  const handleCardClick = (key: string) => {
+    setSelectedCardKey(key);
     const randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
     setFortune(randomFortune);
     setOpen(true);
@@ -47,55 +105,136 @@ function FortuneCard() {
   };
 
   return (
-    <Box textAlign="center" mt={5}>
-      <Typography variant="h4" gutterBottom>
-        Pick a Card 🎴
+    <Box
+      textAlign="center"
+      mt={6}
+      sx={{
+        color: iconColor,
+      }}
+    >
+      <Typography variant="h3" gutterBottom fontWeight="bold">
+        🔮 Pick a Fortune Card
       </Typography>
 
       <Button
         variant="contained"
         color="secondary"
         onClick={shuffleCards}
-        sx={{ mr: 2 }}
+        sx={{
+          px: 4,
+          py: 1.5,
+          fontWeight: "bold",
+          fontSize: 16,
+          mb: 4,
+          borderRadius: 3,
+        }}
       >
-        🔄 Shuffle Cards
+        Shuffle Cards
       </Button>
 
-      {selectedCard && (
-        <Box mt={4}>
-          <Typography variant="h5">You picked:</Typography>
-          <Typography variant="h2">{selectedCard}</Typography>
+      <Box mt={6}>
+        <Typography variant="h5" gutterBottom>
+          {selectedCardKey ? "🔍 You picked:" : "🃏 Pick your card!"}
+        </Typography>
+        <Box display="flex" justifyContent="center">
+          <Box sx={{ fontSize: 96, minHeight: 120 }}>
+            {selectedCardKey ? renderBigIconByKey(selectedCardKey) : " "}
+          </Box>
         </Box>
-      )}
+      </Box>
 
-      <Grid container spacing={2} justifyContent="center" mt={4}>
-        {(shuffledCards.length > 0 ? shuffledCards : cards).map((card) => (
-          <Grid container spacing={2} justifyContent="center" mt={4}>
-            <Card>
-              <CardActionArea onClick={() => handleCardClick(card)}>
-                <CardContent>
-                  <Typography variant="h3" align="center">
-                    {card}
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          </Grid>
-        ))}
+      <Grid container spacing={3} justifyContent="center">
+        {(shuffledCards.length > 0 ? shuffledCards : cardKeys).map(
+          (key, index) => (
+            <Grid key={index} container spacing={2} justifyContent="center">
+              <Card
+                sx={{
+                  width: 120,
+                  height: 180,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  bgcolor: isDark ? "#444" : "#fff",
+                  color: iconColor,
+                  transition: "transform 0.2s, box-shadow 0.3s",
+                  "&:hover": {
+                    transform: "scale(1.1)",
+                    boxShadow: isDark
+                      ? `0px 8px 20px rgba(255, 255, 255, 0.5)`
+                      : `0px 8px 20px ${theme.palette.secondary.main}50`,
+                  },
+                }}
+              >
+                <CardActionArea
+                  onClick={() => handleCardClick(key)}
+                  sx={{ height: "100%" }}
+                >
+                  <CardContent
+                    sx={{
+                      height: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    {renderIconByKey(key)}
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid>
+          )
+        )}
       </Grid>
 
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>🔮 คำทำนายของคุณ</DialogTitle>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        slotProps={{
+          paper: {
+            sx: {
+              bgcolor: isDark ? "#333" : "#fff",
+              color: iconColor,
+              width: 400,
+              height: 500,
+              borderRadius: 2,
+              p: 2,
+              overflow: "hidden",
+            },
+          },
+        }}
+      >
+        <DialogTitle sx={{ fontSize: 20, fontWeight: "bold" }}>
+          🔮 คำทำนายของคุณ
+        </DialogTitle>
         <DialogContent>
-          <Typography variant="h2" align="center">
-            {selectedCard}
-          </Typography>
-          <Typography variant="body1" mt={2}>
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{
+              height: 120,
+              transition: "all 0.3s ease-in-out",
+            }}
+          >
+            {selectedCardKey ? (
+              <Box sx={{ transform: "scale(1)", transition: "transform 0.3s" }}>
+                {renderBigIconByKey(selectedCardKey)}
+              </Box>
+            ) : (
+              <Box sx={{ width: 96, height: 96 }} />
+            )}
+          </Box>
+
+          <Typography
+            variant="body1"
+            mt={2}
+            sx={{ textAlign: "center", fontSize: 18 }}
+          >
             {fortune}
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleClose} variant="outlined" color="secondary">
             ปิด
           </Button>
         </DialogActions>
