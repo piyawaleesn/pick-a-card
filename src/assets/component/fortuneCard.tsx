@@ -43,45 +43,23 @@ function FortuneCard() {
     "จะมีคนคิดถึงคุณ 🥰",
   ];
 
-  const renderIconByKey = (key: string) => {
-    const size = 48;
+  const renderIconByKey = (key: string, size: number = 48) => {
+    const props = { color: iconColor, size };
     switch (key) {
       case "heart":
-        return <BsSuitHeartFill color={iconColor} size={size} />;
+        return <BsSuitHeartFill {...props} />;
       case "spade":
-        return <BsSuitSpadeFill color={iconColor} size={size} />;
+        return <BsSuitSpadeFill {...props} />;
       case "diamond":
-        return <BsSuitDiamondFill color={iconColor} size={size} />;
+        return <BsSuitDiamondFill {...props} />;
       case "club":
-        return <BsSuitClubFill color={iconColor} size={size} />;
+        return <BsSuitClubFill {...props} />;
       case "moon":
-        return <FaMoon color={iconColor} size={size} />;
+        return <FaMoon {...props} />;
       case "star":
-        return <FaStar color={iconColor} size={size} />;
+        return <FaStar {...props} />;
       case "sun":
-        return <FaSun color={iconColor} size={size} />;
-      default:
-        return null;
-    }
-  };
-
-  const renderBigIconByKey = (key: string) => {
-    const size = 96;
-    switch (key) {
-      case "heart":
-        return <BsSuitHeartFill color={iconColor} size={size} />;
-      case "spade":
-        return <BsSuitSpadeFill color={iconColor} size={size} />;
-      case "diamond":
-        return <BsSuitDiamondFill color={iconColor} size={size} />;
-      case "club":
-        return <BsSuitClubFill color={iconColor} size={size} />;
-      case "moon":
-        return <FaMoon color={iconColor} size={size} />;
-      case "star":
-        return <FaStar color={iconColor} size={size} />;
-      case "sun":
-        return <FaSun color={iconColor} size={size} />;
+        return <FaSun {...props} />;
       default:
         return null;
     }
@@ -97,7 +75,9 @@ function FortuneCard() {
     setSelectedCardKey(key);
     const randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
     setFortune(randomFortune);
-    setOpen(true);
+    setTimeout(() => {
+      setOpen(true);
+    }, 500);
   };
 
   const handleClose = () => {
@@ -138,7 +118,7 @@ function FortuneCard() {
         </Typography>
         <Box display="flex" justifyContent="center">
           <Box sx={{ fontSize: 96, minHeight: 120 }}>
-            {selectedCardKey ? renderBigIconByKey(selectedCardKey) : " "}
+            {selectedCardKey ? renderIconByKey(selectedCardKey, 96) : " "}
           </Box>
         </Box>
       </Box>
@@ -218,7 +198,7 @@ function FortuneCard() {
           >
             {selectedCardKey ? (
               <Box sx={{ transform: "scale(1)", transition: "transform 0.3s" }}>
-                {renderBigIconByKey(selectedCardKey)}
+                {renderIconByKey(selectedCardKey, 96)}
               </Box>
             ) : (
               <Box sx={{ width: 96, height: 96 }} />
